@@ -1,0 +1,38 @@
+[package]
+name = "runner"
+version = "0.0.0"
+publish = false
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["lib", "cdylib"]
+
+# See rustc_codegen_spirv/Cargo.toml for details on these features
+[features]
+default = ["use-compiled-tools"]
+use-installed-tools = ["spirv-builder/use-installed-tools"]
+use-compiled-tools = ["spirv-builder/use-compiled-tools"]
+
+[dependencies]
+cfg-if = "1.0.0"
+shared = { path = "../shaders/shared" }
+futures = { version = "0.3", default-features = false, features = ["std", "executor"] }
+structopt = "0.3"
+wgpu = { version = "22.1.0", features = ["spirv", "vulkan-portability"] }
+bytemuck = { workspace = true }
+egui = "0.29.1"
+egui-wgpu = "0.29.1"
+egui-winit = "0.29.1"
+glam = "0.29.2"
+
+[target.'cfg(not(any(target_arch = "wasm32")))'.dependencies]
+env_logger = "0.10.0"
+spirv-builder = { workspace = true, features = ["watch"] }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+web-sys = "0.3.60"
+console_error_panic_hook = "0.1.6"
+console_log = "0.2.0"
+wasm-bindgen-futures = "0.4.18"
