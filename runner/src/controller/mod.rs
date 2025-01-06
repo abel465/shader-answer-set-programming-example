@@ -43,6 +43,8 @@ impl Controller {
         let debug = options.debug;
         let speed = normalize_speed_down(!debug as u32 as f32);
 
+        crate::solver::solve(size);
+
         Self {
             size,
             start: now,

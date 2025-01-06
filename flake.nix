@@ -1,5 +1,5 @@
 {
-  description = "template";
+  description = "shader-answer-set-programming-example";
 
   inputs = {
     fenix = {
@@ -46,10 +46,11 @@
           wayland
           libxkbcommon
           libgcc.lib
+          clingo
         ];
         shadersCompilePath = "$HOME/.cache/rust-gpu-shaders";
-        template = rustPlatform.buildRustPackage {
-          pname = "template";
+        shader-answer-set-programming-example = rustPlatform.buildRustPackage {
+          pname = "shader-answer-set-programming-example";
           version = "0.0.0";
           src = ./.;
           cargoLock.lockFile = ./Cargo.lock;
@@ -67,6 +68,7 @@
           configurePhase = ''
             export SHADERS_DIR="$out/repo/shaders"
             export SHADERS_TARGET_DIR=${shadersCompilePath}
+            export CLINGO_LIBRARY_PATH="${pkgs.clingo}/lib";
           '';
           fixupPhase = ''
             cp -r . $out/repo
@@ -76,18 +78,19 @@
           '';
         };
       in rec {
-        packages.default = pkgs.writeShellScriptBin "template" ''
+        packages.default = pkgs.writeShellScriptBin "shader-answer-set-programming-example" ''
           export CARGO_TARGET_DIR="${shadersCompilePath}"
-          exec -a "$0" "${template}/bin/runner" "$@"
+          exec -a "$0" "${shader-answer-set-programming-example}/bin/runner" "$@"
         '';
         apps.default = {
           type = "app";
-          program = "${packages.default}/bin/template";
+          program = "${packages.default}/bin/shader-answer-set-programming-example";
         };
         devShells.default = with pkgs;
           mkShell {
-            nativeBuildInputs = [rustPkg];
+            nativeBuildInputs = [rustPkg swi-prolog];
             LD_LIBRARY_PATH = "${lib.makeLibraryPath buildInputs}";
+            CLINGO_LIBRARY_PATH = "${clingo}/lib";
           };
       };
     };

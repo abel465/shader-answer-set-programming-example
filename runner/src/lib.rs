@@ -7,6 +7,7 @@ use structopt::StructOpt;
 
 mod app;
 mod bind_group_buffer;
+mod solver;
 mod context;
 mod controller;
 mod fps_counter;

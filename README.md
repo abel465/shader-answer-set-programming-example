@@ -1,5 +1,5 @@
-# Template
-A template for an application using compute/vertex/fragment shaders with egui
+# shader-answer-set-programming-example
+contraint solving with shader visualization
 
 Uses
 [rust-gpu](https://github.com/Rust-GPU/rust-gpu),
